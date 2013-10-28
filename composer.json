@@ -1,0 +1,24 @@
+{
+    "name": "thewilkybarkid/date-time-immutable",
+    "description": "Polyfill for the DateTimeImmutable class added in PHP 5.5.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "thewilkybarkid",
+            "email": "chriswilkinson84@gmail.com"
+        }
+    ],
+    "homepage": "https://github.com/thewilkybarkid/date-time-immutable",
+    "support": {
+        "issues": "https://github.com/thewilkybarkid/date-time-immutable/issues"
+    },
+    "require": {
+        "php": ">=5.2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "autoload": {
+        "classmap": ["src"]
+    }
+}
