@@ -1,6 +1,8 @@
 `DateTimeImmutable` polyfill
 ============================
 
+[![Build Status](https://travis-ci.org/thewilkybarkid/date-time-immutable.png?branch=master)](https://travis-ci.org/thewilkybarkid/date-time-immutable)
+
 This small library adds a polyfill for the `DateTimeImmutable` object introduced in PHP 5.5.0.
 
 Authors
