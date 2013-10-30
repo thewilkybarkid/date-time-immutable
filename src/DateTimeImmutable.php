@@ -18,6 +18,11 @@ class DateTimeImmutable extends DateTime
      */
     private static $_immutable = true;
 
+    public static function createFromFormat($format, $time, $timezone = null)
+    {
+        return new static(parent::createFromFormat($format, $time)->format(DateTime::ISO8601));
+    }
+
     public function add($interval)
     {
         if (self::$_immutable) {
