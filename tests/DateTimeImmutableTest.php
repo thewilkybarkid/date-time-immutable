@@ -36,6 +36,17 @@ class DateTimeImmutableTest extends TestCase
         $this->assertSame($mutable->format(DateTime::RFC3339), $immutable->format(DateTime::RFC3339));
     }
 
+    public function testCreateFromFormatFailure()
+    {
+        $time = 'foo';
+
+        $immutable = DateTimeImmutable::createFromFormat(DateTime::RFC3339, $time);
+        $mutable = DateTime::createFromFormat(DateTime::RFC3339, $time);
+
+        $this->assertFalse($immutable);
+        $this->assertSame(DateTime::getLastErrors(), DateTimeImmutable::getLastErrors());
+    }
+
     public function testAdd()
     {
         $time = '2000-01-02T03:14:25';

@@ -20,7 +20,13 @@ class DateTimeImmutable extends DateTime
 
     public static function createFromFormat($format, $time, $timezone = null)
     {
-        return new static(parent::createFromFormat($format, $time)->format(DateTime::ISO8601));
+        $parent = parent::createFromFormat($format, $time);
+
+        if (false === $parent instanceof DateTime) {
+            return false;
+        }
+
+        return new static($parent->format(DateTime::ISO8601));
     }
 
     public function add($interval)
