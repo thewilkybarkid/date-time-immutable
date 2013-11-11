@@ -15,7 +15,7 @@ It's partially based on Benjamin Eberlei's [Immutable DateTime Objects](http://w
 Installation
 ------------
 
-    $ php composer.phar require thewilkybarkid/date-time-immutable:dev-master
+    $ php composer.phar require thewilkybarkid/date-time-immutable:~1.0
 
 Basic usage
 -----------
