@@ -14,10 +14,21 @@ class DateTimeImmutable extends DateTime
     /**
      * To prevent infinite recursions
      *
-     * @var bool
+     * @var boolean
      */
     private static $_immutable = true;
 
+    /**
+     * Returns new DateTimeImmutable object formatted according to the specified format.
+     *
+     * @link http://php.net/manual/en/datetimeimmutable.createfromformat.php
+     *
+     * @param string            $format
+     * @param string            $time
+     * @param DateTimeZone|null $timezone
+     *
+     * @return DateTimeImmutable|false
+     */
     public static function createFromFormat($format, $time, $timezone = null)
     {
         $parent = parent::createFromFormat($format, $time);
@@ -29,6 +40,15 @@ class DateTimeImmutable extends DateTime
         return new static($parent->format(DateTime::ISO8601));
     }
 
+    /**
+     * Adds an amount of days, months, years, hours, minutes and seconds.
+     *
+     * @link http://php.net/manual/en/datetimeimmutable.add.php
+     *
+     * @param DateInterval $interval
+     *
+     * @return DateTimeImmutable
+     */
     public function add($interval)
     {
         if (self::$_immutable) {
@@ -43,6 +63,15 @@ class DateTimeImmutable extends DateTime
         }
     }
 
+    /**
+     * Creates a new object with modified timestamp.
+     *
+     * @link http://php.net/manual/en/datetimeimmutable.modify.php
+     *
+     * @param string $modify
+     *
+     * @return DateTimeImmutable|false
+     */
     public function modify($modify)
     {
         if (self::$_immutable) {
@@ -57,6 +86,15 @@ class DateTimeImmutable extends DateTime
         }
     }
 
+    /**
+     * Subtracts an amount of days, months, years, hours, minutes and seconds.
+     *
+     * @link http://php.net/manual/en/datetimeimmutable.sub.php
+     *
+     * @param DateInterval $interval
+     *
+     * @return DateTimeImmutable
+     */
     public function sub($interval)
     {
         if (self::$_immutable) {
@@ -71,6 +109,17 @@ class DateTimeImmutable extends DateTime
         }
     }
 
+    /**
+     * Sets the date.
+     *
+     * @link http://php.net/manual/en/datetimeimmutable.setdate.php
+     *
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     *
+     * @return DateTimeImmutable
+     */
     public function setDate($year, $month, $day)
     {
         if (self::$_immutable) {
@@ -85,6 +134,17 @@ class DateTimeImmutable extends DateTime
         }
     }
 
+    /**
+     * Sets the ISO date.
+     *
+     * @link http://php.net/manual/en/datetimeimmutable.setisodate.php
+     *
+     * @param int      $year
+     * @param int      $week
+     * @param int|null $day
+     *
+     * @return DateTimeImmutable
+     */
     public function setISODate($year, $week, $day = null)
     {
         if (self::$_immutable) {
@@ -99,6 +159,17 @@ class DateTimeImmutable extends DateTime
         }
     }
 
+    /**
+     * Sets the time.
+     *
+     * @link http://php.net/manual/en/datetimeimmutable.settime.php
+     *
+     * @param int      $hour
+     * @param int      $minute
+     * @param int|null $second
+     *
+     * @return DateTimeImmutable
+     */
     public function setTime($hour, $minute, $second = null)
     {
         if (self::$_immutable) {
@@ -113,6 +184,15 @@ class DateTimeImmutable extends DateTime
         }
     }
 
+    /**
+     * Sets the date and time based on an Unix timestamp.
+     *
+     * @link http://php.net/manual/en/datetimeimmutable.settimestamp.php
+     *
+     * @param int $timestamp
+     *
+     * @return DateTimeImmutable
+     */
     public function setTimestamp($timestamp)
     {
         if (self::$_immutable) {
@@ -127,6 +207,15 @@ class DateTimeImmutable extends DateTime
         }
     }
 
+    /**
+     * Sets the time zone.
+     *
+     * @link http://php.net/manual/en/datetimeimmutable.settimezone.php
+     *
+     * @param DateTimeZone $timezone
+     *
+     * @return DateTimeImmutable
+     */
     public function setTimezone($timezone)
     {
         if (self::$_immutable) {
