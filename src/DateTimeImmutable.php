@@ -31,7 +31,7 @@ class DateTimeImmutable extends DateTime
      */
     public static function createFromFormat($format, $time, $timezone = null)
     {
-        if(null === $timezone) {
+        if (null === $timezone) {
             $parent = parent::createFromFormat($format, $time);
         } else {
             $parent = parent::createFromFormat($format, $time, $timezone);
@@ -41,7 +41,11 @@ class DateTimeImmutable extends DateTime
             return false;
         }
 
-        return new static($parent->format('Y-m-d H:i:s.u'), $timezone);
+        if (null === $timezone) {
+            return new static($parent->format('Y-m-d H:i:s.u'));
+        } else {
+            return new static($parent->format('Y-m-d H:i:s.u'), $timezone);
+        }
     }
 
     /**
