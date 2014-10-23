@@ -36,6 +36,23 @@ class DateTimeImmutableTest extends TestCase
         $this->assertSame($mutable->format(DateTime::RFC3339), $immutable->format(DateTime::RFC3339));
     }
 
+    public function testCreateFromFormatWithTimezone()
+    {
+        $time = '2000-01-02 03:14:25';
+
+        if ('Europe/London' === date_default_timezone_get()) {
+            $timezone = new DateTimeZone('America/Los_Angeles');
+        } else {
+            $timezone = new DateTimeZone('Europe/London');
+        }
+
+        $immutable = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $time, $timezone);
+        $mutable = DateTime::createFromFormat('Y-m-d H:i:s', $time, $timezone);
+
+        $this->assertInstanceOf('DateTimeImmutable', $immutable);
+        $this->assertSame($mutable->format(DateTime::RFC3339), $immutable->format(DateTime::RFC3339));
+    }
+
     public function testCreateFromFormatFailure()
     {
         $time = 'foo';

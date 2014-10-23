@@ -31,13 +31,17 @@ class DateTimeImmutable extends DateTime
      */
     public static function createFromFormat($format, $time, $timezone = null)
     {
-        $parent = parent::createFromFormat($format, $time);
+        if(null === $timezone) {
+            $parent = parent::createFromFormat($format, $time);
+        } else {
+            $parent = parent::createFromFormat($format, $time, $timezone);
+        }
 
         if (false === $parent instanceof DateTime) {
             return false;
         }
 
-        return new static($parent->format(DateTime::ISO8601));
+        return new static($parent->format('Y-m-d H:i:s.u'), $timezone);
     }
 
     /**
