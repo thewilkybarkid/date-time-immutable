@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0.2
+-----
+
+23 October 2014.
+
+* Fix bug where `createFromFormat()` didn't handle timezones correctly.
+
 1.0.1
 -----
 
