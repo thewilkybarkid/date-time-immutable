@@ -15,14 +15,13 @@ class DateTimeImmutableTest extends TestCase
 {
     public function testInstanceOf()
     {
-        $datetime = new DateTimeImmutable();
+        $this->assertInstanceOf('DateTimeInterface', new DateTimeImmutable());
+    }
 
-        if (version_compare(phpversion(), '5.5.0', '<')) {
-            $this->assertInstanceOf('DateTime', $datetime);
-        } else {
-            // ie not using the polyfill, but still check that the behaviour's the same
-            $this->assertInstanceOf('DateTimeInterface', $datetime);
-        }
+    public function testInstantiateWithoutTimeZone()
+    {
+        new DateTimeImmutable();
+        new DateTimeImmutable("+1 day");
     }
 
     public function testCreateFromFormat()

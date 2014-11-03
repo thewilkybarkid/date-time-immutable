@@ -9,14 +9,23 @@
  * file that was distributed with this source code.
  */
 
-class DateTimeImmutable extends DateTime
+class DateTimeImmutable implements DateTimeInterface
 {
     /**
-     * To prevent infinite recursions
-     *
-     * @var boolean
+     * @var DateTime
      */
-    private static $_immutable = true;
+    private $dt;
+
+    public function __construct($time = "now", $timezone = null)
+    {
+        if($time instanceof DateTime) {
+            $this->dt = clone($time);
+        } elseif(is_null($timezone)) {
+            $this->dt = new DateTime($time);
+        } else {
+            $this->dt = new DateTime($time, $timezone);
+        }
+    }
 
     /**
      * Returns new DateTimeImmutable object formatted according to the specified format.
@@ -31,21 +40,25 @@ class DateTimeImmutable extends DateTime
      */
     public static function createFromFormat($format, $time, $timezone = null)
     {
-        if (null === $timezone) {
-            $parent = parent::createFromFormat($format, $time);
-        } else {
-            $parent = parent::createFromFormat($format, $time, $timezone);
-        }
+        $dt = is_null($timezone)
+            ? DateTime::createFromFormat($format, $time)
+            : DateTime::createFromFormat($format, $time, $timezone);
 
-        if (false === $parent instanceof DateTime) {
+        if(!$dt instanceof DateTime) {
             return false;
         }
 
-        if (null === $timezone) {
-            return new static($parent->format('Y-m-d H:i:s.u'));
-        } else {
-            return new static($parent->format('Y-m-d H:i:s.u'), $timezone);
-        }
+        return new static($dt);
+    }
+
+    public static function createFromMutable(DateTime $datetime)
+    {
+        return new static($datetime);
+    }
+
+    public static function getLastErrors()
+    {
+        return date_get_last_errors();
     }
 
     /**
@@ -57,18 +70,13 @@ class DateTimeImmutable extends DateTime
      *
      * @return DateTimeImmutable
      */
-    public function add($interval)
+    public function add(DateInterval $interval)
     {
-        if (self::$_immutable) {
-            self::$_immutable = false;
-            $newDate = clone $this;
-            $newDate->add($interval);
-            self::$_immutable = true;
-
-            return $newDate;
-        } else {
-            return parent::add($interval);
-        }
+        return $this->mutate(
+            function(DateTime $dt) use ($interval) {
+                $dt->add($interval);
+            }
+        );
     }
 
     /**
@@ -82,16 +90,11 @@ class DateTimeImmutable extends DateTime
      */
     public function modify($modify)
     {
-        if (self::$_immutable) {
-            self::$_immutable = false;
-            $newDate = clone $this;
-            $newDate->modify($modify);
-            self::$_immutable = true;
-
-            return $newDate;
-        } else {
-            return parent::modify($modify);
-        }
+        return $this->mutate(
+            function(DateTime $dt) use ($modify) {
+                $dt->modify($modify);
+            }
+        );
     }
 
     /**
@@ -105,16 +108,11 @@ class DateTimeImmutable extends DateTime
      */
     public function sub($interval)
     {
-        if (self::$_immutable) {
-            self::$_immutable = false;
-            $newDate = clone $this;
-            $newDate->sub($interval);
-            self::$_immutable = true;
-
-            return $newDate;
-        } else {
-            return parent::sub($interval);
-        }
+        return $this->mutate(
+            function(DateTime $dt) use ($interval) {
+                $dt->sub($interval);
+            }
+        );
     }
 
     /**
@@ -130,16 +128,11 @@ class DateTimeImmutable extends DateTime
      */
     public function setDate($year, $month, $day)
     {
-        if (self::$_immutable) {
-            self::$_immutable = false;
-            $newDate = clone $this;
-            $newDate->setDate($year, $month, $day);
-            self::$_immutable = true;
-
-            return $newDate;
-        } else {
-            return parent::setDate($year, $month, $day);
-        }
+        return $this->mutate(
+            function(DateTime $dt) use ($year, $month, $day) {
+                $dt->setDate($year, $month, $day);
+            }
+        );
     }
 
     /**
@@ -155,16 +148,11 @@ class DateTimeImmutable extends DateTime
      */
     public function setISODate($year, $week, $day = null)
     {
-        if (self::$_immutable) {
-            self::$_immutable = false;
-            $newDate = clone $this;
-            $newDate->setISODate($year, $week, $day);
-            self::$_immutable = true;
-
-            return $newDate;
-        } else {
-            return parent::setISODate($year, $week, $day);
-        }
+        return $this->mutate(
+            function(DateTime $dt) use ($year, $week, $day) {
+                $dt->setISODate($year, $week, $day);
+            }
+        );
     }
 
     /**
@@ -180,16 +168,11 @@ class DateTimeImmutable extends DateTime
      */
     public function setTime($hour, $minute, $second = null)
     {
-        if (self::$_immutable) {
-            self::$_immutable = false;
-            $newDate = clone $this;
-            $newDate->setTime($hour, $minute, $second);
-            self::$_immutable = true;
-
-            return $newDate;
-        } else {
-            return parent::setTime($hour, $minute, $second);
-        }
+        return $this->mutate(
+            function(DateTime $dt) use ($hour, $minute, $second) {
+                $dt->setTime($hour, $minute, $second);
+            }
+        );
     }
 
     /**
@@ -203,16 +186,11 @@ class DateTimeImmutable extends DateTime
      */
     public function setTimestamp($timestamp)
     {
-        if (self::$_immutable) {
-            self::$_immutable = false;
-            $newDate = clone $this;
-            $newDate->setTimestamp($timestamp);
-            self::$_immutable = true;
-
-            return $newDate;
-        } else {
-            return parent::setTimestamp($timestamp);
-        }
+        return $this->mutate(
+            function(DateTime $dt) use ($timestamp) {
+                $dt->setTimestamp($timestamp);
+            }
+        );
     }
 
     /**
@@ -224,17 +202,49 @@ class DateTimeImmutable extends DateTime
      *
      * @return DateTimeImmutable
      */
-    public function setTimezone($timezone)
+    public function setTimezone(DateTimeZone $timezone)
     {
-        if (self::$_immutable) {
-            self::$_immutable = false;
-            $newDate = clone $this;
-            $newDate->setTimezone($timezone);
-            self::$_immutable = true;
+        return $this->mutate(
+            function(DateTime $dt) use ($timezone) {
+                $dt->setTimezone($timezone);
+            }
+        );
+    }
 
-            return $newDate;
-        } else {
-            return parent::setTimezone($timezone);
-        }
+    public function diff(DateTimeInterface $datetime2, $absolute = false)
+    {
+        return $this->dt->diff($datetime2, $absolute);
+    }
+
+    public function format($format)
+    {
+        return $this->dt->format($format);
+    }
+
+    public function getOffset()
+    {
+        return $this->dt->getOffset();
+    }
+
+    public function getTimestamp()
+    {
+        return $this->dt->getTimestamp();
+    }
+
+    public function getTimezone()
+    {
+        return $this->dt->getTimezone();
+    }
+
+    public function __wakeup()
+    {
+        // nothing to do, $this->dt takes care of itself
+    }
+
+    private function mutate($mutation)
+    {
+        $newDateTimeImmutable = new static($this->dt);
+        $mutation($newDateTimeImmutable->dt);
+        return $newDateTimeImmutable;
     }
 }
